@@ -7,14 +7,19 @@ import Home from '../../views/Home'
 import Movies from '../../views/Movies'
 import Movie from '../../views/Movie'
 import NotFound from '../../views/NotFound'
+import TVShows from '../../views/TVShows'
+import TVShow from '../../views/TVShow'
 
 const Router = ({history}) => (
     <ConnectedRouter history={history}>
-        <App>
+        <App  history={history}>
             <Switch>
+                <Route path="/movie/:id" component={Movie} />
+                <Route path="/movie" component={Movies} />
+                <Route path="/tv/:id" component={TVShow} />
+                <Route path="/tv" component={TVShows} />
                 <Route exact path="/" component={Home} />
-                <Route path="/movies/:id" component={Movie} />
-                <Route path="/movies" component={Movies} />
+               
                 <Route component={NotFound} />
             </Switch>
         </App>

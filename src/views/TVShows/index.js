@@ -6,16 +6,16 @@ import _ from 'lodash'
 
 import ElementList from '../../components/ElementList'
 
-import * as moviesActions from '../../actions/moviesActions'
+import * as tvshowsActions from '../../actions/tvshowsActions'
 
-class Movies extends React.Component {
+class TVShows extends React.Component {
     constructor(props) {
         super(props) 
 
         this.state = {
-            movies: [],
+            tvshows: [],
             page: 1,
-            loadingMovies: false,
+            loadingTVS: false,
             nowViewing: 'popular',
             sortBy: 'title-asc',
             viewingThisYearOnly: false
@@ -23,24 +23,24 @@ class Movies extends React.Component {
     }
 
     componentDidMount(){
-        const { movies, nowViewing, page } = this.state
-        const { moviesActions } = this.props
+        const { tvshows, nowViewing, page } = this.state
+        const { tvshowsActions } = this.props
 
-        moviesActions.loadMovies(page, nowViewing)
+        tvshowsActions.loadTVShows(page, nowViewing)
 
         window.addEventListener("scroll", this.infiniteScroller, false);
     }
 
     infiniteScroller =  e => {
-        const { moviesActions } = this.props
+        const { tvshowsActions } = this.props
         const { page, nowViewing } = this.state
         const scrollTop = window.scrollY
         const trackLength = document.querySelector('body').scrollHeight - window.innerHeight
         const pctScrolled = Math.floor(scrollTop/trackLength * 100)
-        if(pctScrolled > 95 && !this.state.loadingMovies) {
-            moviesActions.loadMovies(page, nowViewing)
+        if(pctScrolled > 95 && !this.state.loadingTVS) {
+            tvshowsActions.loadTVShows(page, nowViewing)
             this.setState({
-                loadingMovies: true
+                loadingTVS: true
             })
         }
     }
@@ -51,28 +51,28 @@ class Movies extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.movies.length > this.state.movies.length) {
+        if(nextProps.tvshows.length > this.state.tvshows.length) {
             this.setState({
-                loadingMovies: false,
+                loadingTVS: false,
                 page: this.state.page + 1,
-                movies: nextProps.movies
+                tvshows: nextProps.tvshows
             })
         }
         else {
             this.setState({
-                movies: nextProps.movies,
-                loadingMovies: false
+                tvshows: nextProps.tvshows,
+                loadingTVS: false
             })
         }
     }
 
     onViewingChange = e => {
         const nowViewing = e.target.value
-        const { moviesActions } = this.props
-        moviesActions.loadMovies(1, nowViewing)
+        const { tvshowsActions } = this.props
+        tvshowsActions.loadTVShows(1, nowViewing)
         this.setState({
             page: 2,
-            loadingMovies: true,
+            loadingTVS: true,
             nowViewing
         })
     }
@@ -80,46 +80,40 @@ class Movies extends React.Component {
     onSortChange = e => {
         this.setState({sortBy: e.target.value})
     }
-
-    sortMovies = movies => {
+    sortTVShows = tvshows => {
         const { sortBy } = this.state
         const sorting = sortBy.split('-')
-
-        return _.orderBy(movies, sorting[0], sorting[1])
+        return _.orderBy(tvshows, sorting[0], sorting[1])
     }
 
     onToggleViewingThisYearOnly = e => {
         this.setState({viewingThisYearOnly: !this.state.viewingThisYearOnly})
     }
 
-    filterMovies = movies => {
-        return movies.filter(movie => {
-            console.log(movie.release_date, movie.release_date.includes('2018'))
-            return movie.release_date.includes('2018')
+    filterTVShows = tvshows => {
+        return tvshows.filter(tvshow => {
+          
+            return tvshow.first_air_date.includes('2018')
         })
     }
-
-    prepareMovies = movies => {
+    prepareTVShows = tvshows => {
         const { viewingThisYearOnly } = this.state
-        let filteredMovies = viewingThisYearOnly ? this.filterMovies(movies) : movies
-        console.log(filteredMovies.length)
-        return this.sortMovies(filteredMovies)
+        let filteredTVShows = viewingThisYearOnly ? this.filterTVShows(tvshows) : tvshows
+        return this.sortTVShows(filteredTVShows)
     }
     deleteElement = (id) => {
         let {tvshows} = this.state
         _.remove(tvshows,(tvshow) => {return tvshow.id === id})
         this.setState({tvshows:tvshows})
     }
-
     render() {
-        const { movies, nowViewing, sortBy, viewingThisYearOnly } = this.state
+        const { tvshows, nowViewing, sortBy, viewingThisYearOnly } = this.state
         const path = this.props.match.path
-
         return (
             <section className="container main movies">
                 <header className="row">
                     <div className="col-12">
-                        <h1>{movies.length > 0 ? 'Movies' : 'Loading...'}</h1>
+                        <h1>{tvshows.length > 0 ? 'TV Shows' : 'Loading...'}</h1>
                     </div>
                 </header>
                 <aside className="row">
@@ -128,20 +122,20 @@ class Movies extends React.Component {
                         <select className="form-control" onChange={this.onViewingChange} defaultValue={nowViewing}>
                             <option value="popular">Popular</option>
                             <option value="topRated">Top Rated</option>
-                            <option value="upcoming">Upcoming</option>
+                            <option value="upcoming">Airing Today</option>
                         </select>
                     </div>
                     <div className="form-group">
                         <label>Sort by:</label>
                         <select className="form-control" onChange={this.onSortChange} defaultValue={sortBy}>
-                            <option value="title-asc">Title (Asc)</option>
-                            <option value="title-desc">Title (Desc)</option>
+                            <option value="original_name-asc">Title (Asc)</option>
+                            <option value="original_name-desc">Title (Desc)</option>
                             <option value="popularity-asc">Less Popular</option>
                             <option value="popularity-desc">More Popular</option>
                             <option value="vote_average-asc">Worst</option>
                             <option value="vote_average-desc">Best</option>
-                            <option value="release_date-asc">Oldest</option>
-                            <option value="release_date-desc">Newest</option>
+                            <option value="first_air_date-asc">Oldest</option>
+                            <option value="first_air_date-desc">Newest</option>
                         </select>
                     </div>
                     <div className="form-check">
@@ -152,11 +146,12 @@ class Movies extends React.Component {
                     </div>
                 </aside>
                 <div className="row movie-list-wrapper">
-                    {this.prepareMovies(movies).map((movie, i) => {
+                {this.prepareTVShows(tvshows).map((tvshow, i) => {
+                     
                         return (
                             <ElementList path={path} deleteElement={this.deleteElement}
                                 key={i}
-                                {...movie}
+                                {...tvshow}
                             />
                         )
                     })}
@@ -168,15 +163,15 @@ class Movies extends React.Component {
 
 function mapStateToProps(state, ownProps){
     return {
-        movies: state.movies
+        tvshows: state.tvshows
     }
 }
 
 function mapDispatchToProps(dispatch){
     return {
-        moviesActions: bindActionCreators(moviesActions, dispatch),
+        tvshowsActions: bindActionCreators(tvshowsActions, dispatch),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Movies)
+export default connect(mapStateToProps, mapDispatchToProps)(TVShows)
 

@@ -21,7 +21,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "watch-db": "json-server --watch db.json",
+    "watch-db": "json-server --watch --port 3010 db.json",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js watch-db",
     "build-js": "react-scripts build",

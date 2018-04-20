@@ -21,6 +21,18 @@ export function loadMovies(page = 1, endpoint = 'popular'){
         })
     }
 }
+export function loadMoviesRelacionate(page = 1, endpoint, id){
+    return dispatch => {
+        fetch(moviesURL[endpoint](page,id))
+        .then(response => response.json())
+        .then(json => json.results)
+        .then(movies => dispatch(loadMoviesSuccess(movies, page)))
+        .catch(error => {
+            dispatch(loadMoviesFailure())
+            alert('We could not load the page at this time.')
+        })
+    }
+}
 
 
 

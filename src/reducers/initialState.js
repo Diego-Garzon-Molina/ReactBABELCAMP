@@ -1,4 +1,8 @@
 export default {
     movies: [],
-    movie: {}
+    movie: {},
+    tvshows: [],
+    tvshow:{},
+    comentarios:[],
+    busqueda:[]
 }
