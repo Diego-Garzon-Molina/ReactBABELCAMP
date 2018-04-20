@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import * as movieActions from '../../actions/movieActions'
-
+import Comentario from '../../components/Comment'
 
 import ElementList from '../../components/ElementList'
 import * as moviesActions from '../../actions/moviesActions'
@@ -190,21 +190,15 @@ class Movie extends React.Component {
                       </button>
                     </header>
                     {comentarios.map((comentario, i) => {
-                     return   <div className="card" key={i}>
-                     <div className="card-header">
-                         <h4 className="card-title  hide" hide={i}>{comentario.name}</h4>
-                         <input type='text' hide={i} className='hidden hide' name='userNameEdit' id='userNameEdit' onChange={this.comentarioEditandoName} value={comentarioEditando.name}/>
-                
-                     </div>
-                     <div className="card-body">
-                       <label className=" hide" hide={i}>{comentario.body}</label>
-                       <input type='text' className='hidden hide' hide={i} name='userBodyEdit' id='userBodyEdit' onChange={this.comentarioEditandoBody} value={comentarioEditando.body}/>
-                       <button type="button" className="btn btn-ligth m-2 hidden hide" hide={i} onClick = {e => {this.editarComentario(comentario.id,i)}}>Aceptar</button>
-                       <button type="button" className="btn btn-ligth m-2" onClick = {e => {this.mostrarEditarComentario(comentario,i)}}>Editar</button>      
-                       <button type="button" className="btn btn-ligth m-2" onClick = {e => {this.borrarComentario(comentario.id)}}>Borrar</button>
-       
-                   </div>
-                   </div>
+                    return <Comentario key={i} mostrarEditarComentario={this.mostrarEditarComentario} 
+                    comentario={comentario} 
+                    comentarioEditando={comentarioEditando}
+                     i={i}
+                     borrarComentario={this.borrarComentario}
+                     editarComentario={this.editarComentario}
+                     comentarioEditandoBody= {this.comentarioEditandoBody}
+                     comentarioEditandoName={this.comentarioEditandoName}
+                     /> 
                    })}
                   </article> : ""}
               </div>

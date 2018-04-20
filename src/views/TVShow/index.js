@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import ElementList from '../../components/ElementList'
+import Comentario from '../../components/Comment'
 import * as tvshowActions from '../../actions/tvshowActions'
 import * as comentariosActions from '../../actions/comentariosActions'
 import * as tvshowsActions from '../../actions/tvshowsActions'
@@ -180,7 +181,23 @@ class TVShow extends React.Component {
                         </button>
                     </header>
                         {comentarios.map((comentario,i) => {
-                          return   <div className="card" key={i}>
+                        return  <Comentario key={i} mostrarEditarComentario={this.mostrarEditarComentario} 
+                        comentario={comentario} 
+                        comentarioEditando={comentarioEditando}
+                         i={i}
+                         borrarComentario={this.borrarComentario}
+                         editarComentario={this.editarComentario}
+                         comentarioEditandoBody= {this.comentarioEditandoBody}
+                         comentarioEditandoName={this.comentarioEditandoName}
+                         /> }
+                    )}
+                        </article>: ""}
+              </div>
+            </section>
+          </div>;
+    }
+}
+ {/* <div className="card" key={i}>
                           <div className="card-header">
                               <h4 className="card-title  hide" hide={i}>{comentario.name}</h4>
                               <input type='text' hide={i} className='hidden hide' name='userNameEdit' id='userNameEdit' onChange={this.comentarioEditandoName} value={comentarioEditando.name}/>
@@ -198,13 +215,7 @@ class TVShow extends React.Component {
                         </div>
                         </div>
                         })}
-                  </article> : ""}
-              </div>
-            </section>
-          </div>;
-    }
-}
-
+                  </article> */}
 function mapStateToProps(state, ownProps){ 
   
     return {
